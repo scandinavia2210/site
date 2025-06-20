@@ -131,6 +131,65 @@
         return false;
     });
 
+    // Coming Soon functionality for social media links
+    window.showComingSoon = function(platform) {
+        // Create a custom alert or modal
+        const message = `${platform} page is coming soon! We're working hard to bring you amazing content.`;
+        
+        // Create a custom notification
+        const notification = $(`
+            <div class="coming-soon-notification" style="
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, var(--bs-primary), #005B96);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+                z-index: 9999;
+                max-width: 300px;
+                font-weight: 500;
+                transform: translateX(400px);
+                transition: transform 0.3s ease;
+            ">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <div>
+                        <i class="fas fa-clock me-2"></i>
+                        <strong>${platform}</strong>
+                    </div>
+                    <button onclick="$(this).parent().parent().remove()" style="
+                        background: none;
+                        border: none;
+                        color: white;
+                        font-size: 18px;
+                        cursor: pointer;
+                        padding: 0;
+                        margin-left: 10px;
+                    ">&times;</button>
+                </div>
+                <div style="margin-top: 8px; font-size: 14px; opacity: 0.9;">
+                    Coming Soon!
+                </div>
+            </div>
+        `);
+        
+        // Add to body
+        $('body').append(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.css('transform', 'translateX(0)');
+        }, 100);
+        
+        // Auto remove after 4 seconds
+        setTimeout(() => {
+            notification.css('transform', 'translateX(400px)');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 4000);
+    };
 
 })(jQuery);
 
