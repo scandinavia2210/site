@@ -175,47 +175,47 @@
                             <div class="bg-light p-5 rounded h-100 wow fadeInUp" data-wow-delay="0.2s">
                                 <h4 class="text-primary">Send Your Message</h4>
     
-                                <form>
+                                <form id="main-contact-form" onsubmit="return false;">
                                     <div class="row g-4">
                                         <div class="col-lg-12 col-xl-6">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control border-0" id="name" placeholder="Your Name">
-                                                <label for="name">Your Name</label>
+                                                <input type="text" class="form-control border-0" id="main-name" placeholder="Your Name" required>
+                                                <label for="main-name">Your Name</label>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 col-xl-6">
                                             <div class="form-floating">
-                                                <input type="email" class="form-control border-0" id="email" placeholder="Your Email">
-                                                <label for="email">Your Email</label>
+                                                <input type="email" class="form-control border-0" id="main-email" placeholder="Your Email" required pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$">
+                                                <label for="main-email">Your Email</label>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 col-xl-6">
                                             <div class="form-floating">
-                                                <input type="phone" class="form-control border-0" id="phone" placeholder="Phone">
-                                                <label for="phone">Your Phone</label>
+                                                <input type="text" class="form-control border-0" id="main-phone" placeholder="Phone" required>
+                                                <label for="main-phone">Your Phone</label>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 col-xl-6">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control border-0" id="project" placeholder="Project">
-                                                <label for="project">Your Project</label>
+                                                <input type="text" class="form-control border-0" id="main-project" placeholder="Project" required>
+                                                <label for="main-project">Your Project</label>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control border-0" id="subject" placeholder="Subject">
-                                                <label for="subject">Subject</label>
+                                                <input type="text" class="form-control border-0" id="main-subject" placeholder="Subject" required>
+                                                <label for="main-subject">Subject</label>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-floating">
-                                                <textarea class="form-control border-0" placeholder="Leave a message here" id="message" style="height: 160px"></textarea>
-                                                <label for="message">Message</label>
+                                                <textarea class="form-control border-0" placeholder="Leave a message here" id="main-message" style="height: 160px" required></textarea>
+                                                <label for="main-message">Message</label>
                                             </div>
-
                                         </div>
-                                        <div class="col-12">
-                                            <button class="btn btn-primary w-100 py-3">Send Message</button>
+                                        <div class="col-12 d-flex flex-wrap gap-2">
+                                            <button class="btn btn-outline-primary flex-grow-1" type="button" onclick="validateMainFormAndSend('email')">Send via Email</button>
+                                            <button class="btn btn-outline-success flex-grow-1" type="button" onclick="validateMainFormAndSend('whatsapp')">Send via WhatsApp</button>
                                         </div>
                                     </div>
                                 </form>
@@ -321,7 +321,7 @@
                         <span class="text-body"><a href="#" class="border-bottom text-white"><i class="fas fa-copyright text-light me-2"></i>Scandinavia Rwanda ltd.</a>, All right reserved.</span>
                     </div>
                     <div class="col-md-6 text-center text-md-end text-body">
-                        Designed at <a class="border-bottom text-white" href="https://alelabs.tech">Alelabs</a> 
+                        
                     </div>
                 </div>
             </div>
@@ -346,6 +346,53 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
+        <script>
+(function() {
+    function getMainFormData() {
+        return {
+            name: document.getElementById('main-name').value.trim(),
+            email: document.getElementById('main-email').value.trim(),
+            phone: document.getElementById('main-phone').value.trim(),
+            project: document.getElementById('main-project').value.trim(),
+            subject: document.getElementById('main-subject').value.trim(),
+            message: document.getElementById('main-message').value.trim()
+        };
+    }
+    function isValidEmail(email) {
+        return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+    }
+    window.validateMainFormAndSend = function(method) {
+        const d = getMainFormData();
+        if (!d.name || !d.email || !d.phone || !d.project || !d.subject || !d.message) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        if (!isValidEmail(d.email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+        if (method === 'email') {
+            sendMainFormEmail();
+        } else if (method === 'whatsapp') {
+            sendMainFormWhatsApp();
+        }
+    };
+    function buildMainFormMessage() {
+        const d = getMainFormData();
+        return `Name: ${d.name}\nEmail: ${d.email}\nPhone: ${d.phone}\nProject: ${d.project}\nSubject: ${d.subject}\nMessage: ${d.message}`;
+    }
+    function sendMainFormEmail() {
+        const subject = encodeURIComponent(document.getElementById('main-subject').value || 'Contact Form Submission');
+        const body = encodeURIComponent(buildMainFormMessage());
+        window.open(`mailto:info@scandinavia.co.rw?subject=${subject}&body=${body}`);
+    }
+    function sendMainFormWhatsApp() {
+        const phone = '250790000001';
+        const text = encodeURIComponent(buildMainFormMessage());
+        window.open(`https://wa.me/${phone}?text=${text}`);
+    }
+})();
+</script>
     </body>
 
 </html>
