@@ -176,48 +176,48 @@
                         <div class="bg-light p-5 rounded h-100 wow fadeInUp" data-wow-delay="0.2s">
                             <h4 class="text-primary">Send Your Message</h4>
                             <p class="mb-4">Have any questions or inquiries? Feel free to reach out to us using the form below.</p>
-                            <form>
+                            <form id="about-contact-form" onsubmit="return false;">
                 <div class="row g-4">
                                     <div class="col-lg-12 col-xl-6">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control border-0" id="name" placeholder="Your Name">
-                                            <label for="name">Your Name</label>
+                                            <input type="text" class="form-control border-0" id="about-name" placeholder="Your Name" required>
+                                            <label for="about-name">Your Name</label>
                             </div>
                             </div>
                                     <div class="col-lg-12 col-xl-6">
                                         <div class="form-floating">
-                                            <input type="email" class="form-control border-0" id="email" placeholder="Your Email">
-                                            <label for="email">Your Email</label>
+                                            <input type="email" class="form-control border-0" id="about-email" placeholder="Your Email" required pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$">
+                                            <label for="about-email">Your Email</label>
                             </div>
                         </div>
                                     <div class="col-lg-12 col-xl-6">
                                         <div class="form-floating">
-                                            <input type="phone" class="form-control border-0" id="phone" placeholder="Phone">
-                                            <label for="phone">Your Phone</label>
+                                            <input type="text" class="form-control border-0" id="about-phone" placeholder="Phone" required>
+                                            <label for="about-phone">Your Phone</label>
                     </div>
                             </div>
                                     <div class="col-lg-12 col-xl-6">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control border-0" id="project" placeholder="Project">
-                                            <label for="project">Your Project</label>
+                                            <input type="text" class="form-control border-0" id="about-project" placeholder="Project" required>
+                                            <label for="about-project">Your Project</label>
                             </div>
                         </div>
                                     <div class="col-12">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control border-0" id="subject" placeholder="Subject">
-                                            <label for="subject">Subject</label>
+                                            <input type="text" class="form-control border-0" id="about-subject" placeholder="Subject" required>
+                                            <label for="about-subject">Subject</label>
                     </div>
                             </div>
                                     <div class="col-12">
                                         <div class="form-floating">
-                                            <textarea class="form-control border-0" placeholder="Leave a message here" id="message" style="height: 160px"></textarea>
-                                            <label for="message">Message</label>
+                                            <textarea class="form-control border-0" placeholder="Leave a message here" id="about-message" style="height: 160px" required></textarea>
+                                            <label for="about-message">Message</label>
                             </div>
                         </div>
-                                    <div class="col-12">
-                                        <button class="btn btn-primary w-100 py-3">Send Message</button>
-                    </div>
-                            </div>
+                                    <div class="col-12 d-flex flex-wrap gap-2">
+                                        <button class="btn btn-outline-primary flex-grow-1" type="button" onclick="validateAboutFormAndSend('email')">Send via Email</button>
+                                        <button class="btn btn-outline-success flex-grow-1" type="button" onclick="validateAboutFormAndSend('whatsapp')">Send via WhatsApp</button>
+                                    </div>
                             </form>
                         </div>
                     </div>
@@ -340,6 +340,53 @@
 
         <!-- Template Javascript -->
         <script src="js/main.js"></script>
+        <script>
+(function() {
+    function getAboutFormData() {
+        return {
+            name: document.getElementById('about-name').value.trim(),
+            email: document.getElementById('about-email').value.trim(),
+            phone: document.getElementById('about-phone').value.trim(),
+            project: document.getElementById('about-project').value.trim(),
+            subject: document.getElementById('about-subject').value.trim(),
+            message: document.getElementById('about-message').value.trim()
+        };
+    }
+    function isValidEmail(email) {
+        return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+    }
+    window.validateAboutFormAndSend = function(method) {
+        const d = getAboutFormData();
+        if (!d.name || !d.email || !d.phone || !d.project || !d.subject || !d.message) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        if (!isValidEmail(d.email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+        if (method === 'email') {
+            sendAboutFormEmail();
+        } else if (method === 'whatsapp') {
+            sendAboutFormWhatsApp();
+        }
+    };
+    function buildAboutFormMessage() {
+        const d = getAboutFormData();
+        return `Name: ${d.name}\nEmail: ${d.email}\nPhone: ${d.phone}\nProject: ${d.project}\nSubject: ${d.subject}\nMessage: ${d.message}`;
+    }
+    function sendAboutFormEmail() {
+        const subject = encodeURIComponent(document.getElementById('about-subject').value || 'Contact Form Submission');
+        const body = encodeURIComponent(buildAboutFormMessage());
+        window.open(`mailto:info@scandinavia.co.rw?subject=${subject}&body=${body}`);
+    }
+    function sendAboutFormWhatsApp() {
+        const phone = '250790000001';
+        const text = encodeURIComponent(buildAboutFormMessage());
+        window.open(`https://wa.me/${phone}?text=${text}`);
+    }
+})();
+</script>
     </body>
 
 </html>
